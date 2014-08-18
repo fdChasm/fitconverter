@@ -4,6 +4,7 @@
 import sys
 import struct
 import datetime
+import iso8601
 import time
 import binascii
 import math
@@ -38,12 +39,7 @@ def step_tcx(data):
     # Lap start _time_ needs to be logged... same as the timestamp?
     def track_point(node):
         time_raw = node.find("Time").text
-        # Garmin Connect  includes .%f, RideWithGPS doesn't.
-        if '.' in time_raw:
-            format = "%Y-%m-%dT%H:%M:%S.%fZ"
-        else:
-            format = "%Y-%m-%dT%H:%M:%S"
-        time = datetime.datetime.strptime(time_raw, format)
+        time = iso8601.parse_date(time_raw)
         etime = time - epoch
         distance = int(float(node.find("DistanceMeters").text)*100)
         # Should probably XPath this
