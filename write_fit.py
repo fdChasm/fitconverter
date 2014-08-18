@@ -6,13 +6,14 @@ import struct
 import datetime
 import iso8601
 import time
+import pytz
 import binascii
 import math
 from xml.dom.minidom import parse
 import xml.etree.ElementTree as ET
 
 # Garmin-defined
-epoch = datetime.datetime(1989, 12, 31, 0, 0, 0)
+epoch = datetime.datetime(1989, 12, 31, 0, 0, 0, tzinfo=pytz.UTC)
 
 track_name = ""
 laps = []
@@ -171,7 +172,7 @@ out.write(write_field(0, [
     (1, "uint16", 1), # manufacturer
     (2, "uint16", 1), # product
     (3, "uint32z", 1), # serial
-    (4, "uint32", int((datetime.datetime.utcnow() - epoch).total_seconds())) # time_created
+    (4, "uint32", int((datetime.datetime.now(tz=pytz.UTC) - epoch).total_seconds())) # time_created
         ]))
 
 # 31, course
